@@ -1,0 +1,13 @@
+pytubefix==6.16.2 
+google-cloud-storage==2.18.2 
+transformers==4.44.2 
+accelerate==0.34.2 
+einops==0.8.0 
+sentence-transformers==3.0.1 
+langchain==0.3.0
+langchain-community==0.3.0
+langchain-pinecone==0.2.0
+langchain-huggingface==0.1.0
+langchain_groq==0.2.0
+torchaudio==2.4.0
+chainlit==1.2.0
