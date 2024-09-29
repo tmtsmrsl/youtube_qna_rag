@@ -1,4 +1,3 @@
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_groq import ChatGroq
 from langchain_community.embeddings import DeepInfraEmbeddings
@@ -6,27 +5,20 @@ from typing import List
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-import torch
 
-def load_vector_store(pinecone_api_key, deepinfra_api_key=None, local_embeddings=False):
+def load_vector_store(pinecone_api_key, deepinfra_api_key):
     """
     Load the Pinecone vector store containing our transcript embeddings.
     """
     index_name =  "statquest-machinelearning"
     model_name= "BAAI/bge-base-en-v1.5"
+        
+    if deepinfra_api_key is None:
+        raise ValueError("deepinfra_api_key is required if you are not using local embeddings")
     
-    
-    if local_embeddings:
-        device = 0 if torch.cuda.is_available() else None
-        embeddings = HuggingFaceEmbeddings(model_name=model_name, 
-                                    model_kwargs={"trust_remote_code":True, 
-                                                "device":device})
-    else:
-        if deepinfra_api_key is None:
-            raise ValueError("deepinfra_api_key is required if you are not using local embeddings")
-        embeddings = DeepInfraEmbeddings(model_id=model_name, 
-                                         deepinfra_api_token=deepinfra_api_key)
-    
+    embeddings = DeepInfraEmbeddings(model_id=model_name, 
+                                        deepinfra_api_token=deepinfra_api_key)
+
     vector_store = PineconeVectorStore(index_name=index_name, embedding=embeddings,
                                        pinecone_api_key=pinecone_api_key)
     return vector_store

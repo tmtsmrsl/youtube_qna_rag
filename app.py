@@ -13,7 +13,7 @@ async def on_chat_start():
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     DEEPINFRA_API_KEY = os.getenv("DEEPINFRA_API_KEY")
     
-    vector_store = load_vector_store(PINECONE_API_KEY, DEEPINFRA_API_KEY, local_embeddings=False)
+    vector_store = load_vector_store(PINECONE_API_KEY, DEEPINFRA_API_KEY)
     llm = load_llm(GROQ_API_KEY)
     chain = create_qa_chain(llm, vector_store)
     
