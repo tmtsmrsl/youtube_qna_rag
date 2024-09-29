@@ -12,4 +12,4 @@ langchain_groq==0.2.0
 # torchaudio==2.4.0
 chainlit==1.2.0
 bcrypt==4.2.0
-supabase==2.7.4
+supabase==2.6.0
