@@ -1,0 +1,6 @@
+.env
+*.venv
+*.ipynb
+__pycache__
+.files
+google_credential.json
