@@ -1,8 +1,10 @@
 import os
 
+import bcrypt
 import chainlit as cl
 from dotenv import load_dotenv
 
+from user_db import fetch_user_from_database
 from utils import create_qa_chain, load_llm, load_vector_store
 
 
@@ -41,3 +43,19 @@ async def main(message: cl.Message):
         elements = []
 
     await cl.Message(content=answer, elements=elements).send() 
+    
+@cl.password_auth_callback
+def auth_callback(username: str, password: str):
+    # Fetch the user matching username from your database
+    # and compare the hashed password with the value stored in the database
+    result = fetch_user_from_database(username)
+    
+    if result:
+        hashed_password = result["hashed_password"]
+        role = result["role"]
+        if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+            return cl.User(
+                identifier=username, metadata={"role": role, "provider": "credentials"}
+            ) 
+    else: 
+        return None
